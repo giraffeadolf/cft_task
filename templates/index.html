@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-        <title>Main page</title>
-    </head>
-    <body>
-        <h1>Music Converter</h1>
-    </body>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <title>Music Converter</title>
+</head>
+
+<body>
+    <h1>Music Converter</h1>
+    {% block content %} {% endblock %}
+</body>
+
 </html>

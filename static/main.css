@@ -1,4 +1,11 @@
+div
+{
+    display: block;
+    text-align: center;
+}
+
 h1
 {
     text-align: center;
+    margin-bottom: 10%;
 }

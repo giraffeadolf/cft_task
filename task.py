@@ -17,9 +17,15 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
-    image_path = 'static/images/spectrum.png'
-    if os.path.exists(image_path):
-        os.remove(image_path)
+
+    for the_file in os.listdir(app.config['UPLOAD_FOLDER']):
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], the_file)
+        if os.path.isfile(file_path):
+            os.unlink(file_path)
+    for the_file in os.listdir('static/images'):
+        file_path = os.path.join('static/images', the_file)
+        if os.path.isfile(file_path):
+            os.unlink(file_path)
 
     if request.method == 'POST':
         # check if the post request has the file part
@@ -31,7 +37,7 @@ def upload_file():
         # submit an empty part without filename
         if file.filename == '':
             flash('No selected file')
-            return redirect(request.url)
+            return 'No selected file'
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -42,8 +48,8 @@ def upload_file():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    mp3_to_img(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    spectrum_image = url_for('static', filename='images/spectrum.png')
+    mp3_to_img(filename)
+    spectrum_image = url_for('static', filename='images/' + filename[:-4] + '.png')
     return render_template('result.html', filename=filename, spectrum_image=spectrum_image)
 
 

@@ -4,6 +4,10 @@ from werkzeug.utils import secure_filename
 from spectrum import mp3_to_img
 
 UPLOAD_FOLDER = 'uploads'
+
+if ~os.path.exists(UPLOAD_FOLDER):
+    os.mkdir(UPLOAD_FOLDER)
+
 ALLOWED_EXTENSIONS = set(['mp3', 'wav'])
 
 app = Flask(__name__)

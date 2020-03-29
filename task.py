@@ -1,9 +1,10 @@
 import os
 from flask import Flask, render_template, url_for, request, redirect, flash, send_from_directory
 from werkzeug.utils import secure_filename
+from spectrum import mp3_to_img
 
 UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = set(['mp3'])
+ALLOWED_EXTENSIONS = set(['mp3', 'wav'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -16,6 +17,10 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
+    image_path = 'static/images/spectrum.png'
+    if os.path.exists(image_path):
+        os.remove(image_path)
+
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -37,7 +42,9 @@ def upload_file():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return render_template('result.html', filename=filename)
+    mp3_to_img(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    spectrum_image = url_for('static', filename='images/spectrum.png')
+    return render_template('result.html', filename=filename, spectrum_image=spectrum_image)
 
 
 if __name__ == '__main__':
